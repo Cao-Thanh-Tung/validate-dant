@@ -22,12 +22,11 @@ public class ShuffleFirstFitStrategy extends HeuristicStrategy implements IStrat
         MinDistanceFitOrderAssignStrategy minDistanceFitOrderAssignStrategy = new MinDistanceFitOrderAssignStrategy();
         Solution solution = minDistanceFitOrderAssignStrategy.createSolution(new AlgorithmInput(vehicles, orders, input.getDistanceTimeMatrix()), config);
         IObjective[] objectives = config.getObjectives();
-        do{
+        for (int i = 0; i < config.getNumShuffle(); i++) {
             shuffleOrderArray(orders);
             Solution solution1 = minDistanceFitOrderAssignStrategy.createSolution(new AlgorithmInput(vehicles, orders, input.getDistanceTimeMatrix()), config);
             solution = getBetterSolution(solution, solution1, objectives);
         }
-        while ((double) (System.currentTimeMillis() - startTime) /1000 < config.getSolveTimeLimitSec());
         return solution;
     }
     public static void shuffleOrderArray(Order[] array) {

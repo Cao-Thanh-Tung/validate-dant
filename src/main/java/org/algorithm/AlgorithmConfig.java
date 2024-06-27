@@ -4,16 +4,16 @@ import org.algorithm.constraint.IConstraint;
 import org.algorithm.objective.IObjective;
 
 public class AlgorithmConfig {
-    private double solveTimeLimitSec;
+    private int numShuffle;
     private IConstraint[] constraints;
     private IObjective[] objectives;
 
-    public double getSolveTimeLimitSec() {
-        return solveTimeLimitSec;
+    public int getNumShuffle() {
+        return numShuffle;
     }
 
-    public void setSolveTimeLimitSec(double solveTimeLimitSec) {
-        this.solveTimeLimitSec = solveTimeLimitSec;
+    public void setNumShuffle(int numShuffle) {
+        this.numShuffle = numShuffle;
     }
 
     public IConstraint[] getConstraints() {

@@ -21,13 +21,13 @@ public class ShuffleRoundRobinStrategy extends HeuristicStrategy implements IStr
         RoundRobinOrderAssignStrategy roundRobinOrderAssignStrategy = new RoundRobinOrderAssignStrategy();
         Solution solution = roundRobinOrderAssignStrategy.createSolution(new AlgorithmInput(vehicles, orders, input.getDistanceTimeMatrix()), config);
         IObjective[] objectives = config.getObjectives();
-        do{
+        for (int i = 0; i <config.getNumShuffle(); i++) {
             shuffleOrderArray(orders);
             shuffleVehicleArray(vehicles);
             Solution solution1 = roundRobinOrderAssignStrategy.createSolution(new AlgorithmInput(vehicles, orders, input.getDistanceTimeMatrix()), config);
             solution = getBetterSolution(solution, solution1, objectives);
         }
-        while ((double) (System.currentTimeMillis() - startTime) /1000 < config.getSolveTimeLimitSec());
+
         return solution;
     }
 

@@ -24,7 +24,7 @@ import java.io.*;
 public class TestSolve {
     public static void main(String[] args) {
 
-        String csvFile = "result.csv";
+        String csvFile = "result500.csv";
         String[] header = {"file_data", "strategy", "run_order", "vehicle_num", "order_num", "total_distance", "total_duration", "total_serve_able_order", "total_demand", "total_vehicle_used", "run_time"};
         String[] folderNames = {"5_20", "10_50", "10_100", "20_100", "50_1000"};
         IDistanceTimeMatrix distanceTimeMatrix = new DistanceTimeOsmMatrix();
@@ -38,17 +38,18 @@ public class TestSolve {
                 new MinDurationObjective()
         };
         IStrategy[] strategies = {
-                new FirstFitOrderAssignStrategy(),
-                new MinDistanceFitOrderAssignStrategy(),
-                new RoundRobinOrderAssignStrategy(),
-//                new ShuffleRoundRobinStrategy(),
+//                new FirstFitOrderAssignStrategy(),
+//                new MinDistanceFitOrderAssignStrategy(),
+//                new RoundRobinOrderAssignStrategy(),
+                new ShuffleRoundRobinStrategy(),
 //                new ShuffleFirstFitStrategy(),
 //                new ShuffleMinDistanceFitStrategy(),
         };
         AlgorithmConfig config = new AlgorithmConfig();
         config.setConstraints(constraints);
         config.setObjectives(objectives);
-        int[] time = {30, 60};
+//        int[] nums = {500};
+        int n = 500;
 //        AlgorithmInput input = getInputFromFile("dataset" + File.separator + "10_100" + File.separator + "10_100_1.txt", distanceTimeMatrix);
 //        Solution solution = (new FirstFitOrderAssignStrategy()).createSolution(input, config);
 //        System.out.println(solution.totalDistance);
@@ -63,14 +64,15 @@ public class TestSolve {
                     if (strategy instanceof HeuristicStrategy){
                         for (int i = 1; i <= 10; i++) {
                             String fileName =fo + "_" + i + ".txt";
-                            for (int t : time){
                                 AlgorithmInput input = getInputFromFile("dataset" + File.separator + fo + File.separator + fileName, distanceTimeMatrix);
-                                config.setSolveTimeLimitSec(t);
-                                System.out.println("Đang xử lý file: " + fileName + " với chiến lược: " + strategy.getName() + " số lượng xe: " + input.getVehicles().length + " số lượng đơn hàng: " + input.getOrders().length + "time: "+ t);
+                                config.setNumShuffle(n);
+                                System.out.println("Đang xử lý file: " + fileName + " với chiến lược: " + strategy.getName() + " số lượng xe: " + input.getVehicles().length + " số lượng đơn hàng: " + input.getOrders().length + "numShuffer: "+ n);
+                                long startTime = System.currentTimeMillis();
                                 Solution solution = strategy.createSolution(input, config);
-                                writer.write(fileName +","+strategy.getName()+","+1+","+input.getVehicles().length+","+input.getOrders().length+","+solution.totalDistance+","+solution.totalDuration+","+solution.totalServeAbleOrder+","+solution.totalDemand+","+solution.numVehicleUsed+","+(t*1000));
+                                long endTime = System.currentTimeMillis();
+                                long duration = endTime - startTime;
+                                writer.write(fileName +","+strategy.getName()+","+1+","+input.getVehicles().length+","+input.getOrders().length+","+solution.totalDistance+","+solution.totalDuration+","+solution.totalServeAbleOrder+","+solution.totalDemand+","+solution.numVehicleUsed+","+duration);
                                 writer.newLine();
-                            }
                         }
                     }else{
                         for (int i = 1; i <= 10; i++) {
